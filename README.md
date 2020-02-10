@@ -9,7 +9,8 @@ It will ask you for your Guard codes if needed.
 
 Always when you want to update accounts data - run `./stats_loader.py` again.
 
-To show your account data run `./changer.py` without parameters.
+To show your account data run `./changer.py` without parameters.  
+WARNING: It shows only accounts which was logged on this PC at least once. No matters on `acc.json` file.  
 Example:
 ```
 $ ./changer.py 
