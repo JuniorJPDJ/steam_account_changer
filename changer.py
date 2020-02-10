@@ -189,6 +189,8 @@ def main():
         print(f"  SteamID3: {a.as_steam3}")
         print(f"  | Login: {a.get_login()}".ljust(50), end='')
         print(f"  | Name: {a.get_name()}")
+
+        # TODO: wallet
         
         csacc = a.get_app_config_owner(730)
         if csacc is not None:
@@ -207,12 +209,16 @@ def main():
             if csacc is not None:
                 if 'csgo_profile' in stats:
                     csprof = stats['csgo_profile']
+                    if 'csgo_penalty_end' in stats:
+                        date = datetime.fromtimestamp(stats['csgo_penalty_end'])
+                        print(f"    | Cooldown end: {date:%Y-%m-%d %H:%M}".ljust(50), end='')
+                        print(f"  | Cooldown reason: {stats['csgo_penalty_reason']}")
                     if 'ranking' in csprof:
                         print(f"    | Rank: {player.Player.ranks_map[csprof['ranking']['rankId']]}".ljust(50), end='')
                         print(f"  | Wins: {csprof['ranking']['wins']}")
                     print(f"    | Level: {csprof['playerLevel']}".ljust(50), end='')
-                    if 'last_mm' in stats:
-                        date = datetime.fromtimestamp(stats['last_mm'])
+                    if 'csgo_last_mm' in stats:
+                        date = datetime.fromtimestamp(stats['csgo_last_mm'])
                         print(f"  | Last MM: {date:%Y-%m-%d %H:%M}")
                     else:
                         print()

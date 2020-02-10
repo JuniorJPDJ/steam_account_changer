@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import json
+import time
 
 import gevent
 import gevent.event
@@ -21,8 +22,10 @@ def run_account(acc):
     cs = CSGOClient(client)
     profile = gevent.event.Event()
     matches = gevent.event.Event()
+    mm = gevent.event.Event()
     events.append(profile)
     events.append(matches)
+    events.append(mm)
 
     @client.on('logged_on')
     def start_csgo():
@@ -35,10 +38,10 @@ def run_account(acc):
         print(f"New login key for {acc['username']}!")
         acc['login_key'] = client.login_key
 
-    #@client.on(None)
-    #def kek(msgtype, msg=None):
-    #    print(msgtype)
-    #    print(msg)
+#    @client.on(None)
+#    def debug(msgtype, msg=None):
+#        print(msgtype)
+#        print(msg)
 
     @client.on(EMsg.ClientVACBanStatus)
     def vac_status(msg):
@@ -59,17 +62,24 @@ def run_account(acc):
             acc['wallet_balance_delayed'] = msg.body.balance64_delayed
             acc['wallet_currency'] = msg.body.currency
 
+#    @cs.on(None)
+#    def debug(msgtype, msg=None):
+#        if str(msgtype) not in ('ECsgoGCMsg.EMsgGCCStrike15_v2_MatchList', 'recent_user_games'):   # huuuge messages
+#            print("Type:", msgtype)
+#            print(msg)
+
     @cs.on('ready')
     def gc_ready():
         print("CS:GO Ready!")
         cs.request_player_profile(cs.account_id)
         cs.request_recent_user_games(cs.account_id)
+        cs.request_matchmaking_stats()
         print("Requested player profile info")
 
     @cs.on('recent_user_games')
     def got_matches(resp):
         if len(resp.matches) > 0:
-            acc['last_mm'] = resp.matches[-1].matchtime
+            acc['csgo_last_mm'] = max(m.matchtime for m in resp.matches)
         matches.set()
 
     @cs.on('player_profile')
@@ -81,7 +91,16 @@ def run_account(acc):
             #client.logout()
             profile.set()
 
+    @cs.on('matchmaking_stats')
+    def got_mm_stats(resp):
+        if resp.penalty_seconds:
+            acc['csgo_penalty_end'] = resp.penalty_seconds + int(time.time())
+            acc['csgo_penalty_reason'] = resp.penalty_reason
+        mm.set()
+
 #    def cleanup():
+# TODO: group accounts in events and log out from csgo/steam
+# TODO: write refresh date
         
 
     print(f'Logging in to {acc["username"]}')
