@@ -1,5 +1,5 @@
 acc.json
-creds/
+creds/*
 __pycache__
 gdb.txt
 
