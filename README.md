@@ -2,10 +2,10 @@
 
 ## How to use
 
-First, You need to add your accounts to `acc.json` file in main directory. It's currently not automated :/
-Example file is provided, you just need to copy it and modify accounts username and passwords.
-Then If you want changer to show your stats and account info - run `./stats_loader.py`.
-It will ask you for your Guard codes if needed.
+First, You need to add your accounts to `acc.json` file in main directory. It's currently not automated :confused:  
+Example file is provided, you just need to copy it and modify accounts username and passwords.  
+Then If you want changer to show your stats and account info - run `./stats_loader.py`.  
+It will ask you for your Guard codes if needed.  
 
 Always when you want to update accounts data - run `./stats_loader.py` again.
 
