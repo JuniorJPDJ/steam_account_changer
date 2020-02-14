@@ -211,8 +211,9 @@ def main():
                     csprof = stats['csgo_profile']
                     if 'csgo_penalty_end' in stats:
                         date = datetime.fromtimestamp(stats['csgo_penalty_end'])
-                        print(f"    | Cooldown end: {date:%Y-%m-%d %H:%M}".ljust(50), end='')
-                        print(f"  | Cooldown reason: {stats['csgo_penalty_reason']}")
+                        if date > datetime.now():
+                            print(f"    | Cooldown end: {date:%Y-%m-%d %H:%M}".ljust(50), end='')
+                            print(f"  | Cooldown reason: {stats['csgo_penalty_reason']}")
                     if 'ranking' in csprof:
                         print(f"    | Rank: {player.Player.ranks_map[csprof['ranking']['rankId']]}".ljust(50), end='')
                         print(f"  | Wins: {csprof['ranking']['wins']}")
