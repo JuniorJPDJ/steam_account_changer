@@ -9,7 +9,7 @@ from google.protobuf import json_format
 
 from steam.client import SteamClient, EMsg
 from steam.enums import EResult, ECurrencyCode
-from csgo import CSGOClient
+from csgo.client import CSGOClient
 
 with open('acc.json', 'r') as f:
     accounts = json.load(f)

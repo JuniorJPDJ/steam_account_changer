@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import time
 
-from steam import SteamID
+from steam.steamid import SteamID
 
 STEAMDIR = Path.home() / ".local/share/Steam"
 STEAMUSERDATA = STEAMDIR / "userdata"
@@ -28,7 +28,7 @@ class SteamAccount(SteamID):
         
         accs = cfg['InstallConfigStore']['Software']['Valve']['Steam']['Accounts']
         for a in accs:
-            if accs[a]['SteamID'] == str(self.as_64):
+            if 'SteamID' in accs[a] and accs[a]['SteamID'] == str(self.as_64):
                 return a
 
     def _get_app_localconfig(self, appid: int):
@@ -100,7 +100,12 @@ class Steam(object):
         for accdir in os.scandir(STEAMUSERDATA):
             if not accdir.is_dir():
                 continue
-            
+
+            try:
+                int(accdir.name)
+            except ValueError:
+                continue
+
             acc = accdir.name
             yield SteamAccount(acc)
 
