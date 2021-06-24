@@ -222,7 +222,8 @@ def main():
                     if 'ranking' in csprof:
                         print(f"    | Rank: {player.Player.ranks_map[csprof['ranking']['rankId']]}".ljust(50), end='')
                         print(f"  | Wins: {csprof['ranking']['wins']}")
-                    print(f"    | Level: {csprof['playerLevel']}".ljust(50), end='')
+                    if 'playerLevel' in csprof:
+                        print(f"    | Level: {csprof['playerLevel']}".ljust(50), end='')
                     if 'csgo_last_mm' in stats:
                         date = datetime.fromtimestamp(stats['csgo_last_mm'])
                         print(f"  | Last MM: {date:%Y-%m-%d %H:%M}")
